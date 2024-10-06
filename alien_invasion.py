@@ -23,12 +23,12 @@ class AlienInvasion:
         self.bullets = pygame.sprite.Group()
 
     def run_game(self):
-        """Starts the main loop of the game."""
+        """Start the main loop for the game."""
         while True:
             self._check_events()
             self.ship.update()
             self._update_bullets()
-            self._update_screen()           
+            self._update_screen()
             self.clock.tick(60)
 
     def _check_events(self):
@@ -40,15 +40,14 @@ class AlienInvasion:
                 self._check_keydown_events(event)
             elif event.type == pygame.KEYUP:
                 self._check_keyup_events(event)
-                
+
     def _update_screen(self):
         """Update images on the screen, and flip to the new screen."""
         self.screen.fill(self.settings.bg_color)
-        self.ship.blitme()
-        pygame.display.flip()
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
         self.ship.blitme()
+        pygame.display.flip()
 
     def _check_keydown_events(self, event):
         if event.key == pygame.K_ESCAPE or event.key == pygame.K_q:
@@ -67,16 +66,20 @@ class AlienInvasion:
             self.ship.moving_left = False
 
     def _fire_bullet(self):
+        """Create a new bullet and add it to the bullets group."""
         if len(self.bullets) < self.settings.bullets_allowed:
             new_bullet = Bullet(self)
             self.bullets.add(new_bullet)
 
     def _update_bullets(self):
+        """Update position of bullets and get rid of old bullets."""
+        # Update bullet positions.
         self.bullets.update()
+
+        # Get rid of bullets that have disappeared.
         for bullet in self.bullets.copy():
             if bullet.rect.bottom <= 0:
                 self.bullets.remove(bullet)
-        print(len(self.bullets))
 
 if __name__ == '__main__':
     #Make a game instance, and run the game.
