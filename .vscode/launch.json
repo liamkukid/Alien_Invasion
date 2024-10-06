@@ -5,10 +5,10 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python Debugger: Current File",
+            "name": "Alien Invasion",
             "type": "debugpy",
             "request": "launch",
-            "program": "${file}",
+            "program": "alien_invasion.py",
             "console": "integratedTerminal"
         }
     ]
