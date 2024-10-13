@@ -6,7 +6,7 @@ import pygame
 from settings import Settings
 from game_stats import GameStats
 from ship import Ship
-from bullet import Bullet
+from bullets import Bullets
 from alien import Alien
 
 class AlienInvasion:
@@ -24,9 +24,8 @@ class AlienInvasion:
         pygame.display.set_caption("Alien Invasion")
 
         self.stats = GameStats(self)
-
+        self.bullets = Bullets(self)
         self.ship = Ship(self)
-        self.bullets = pygame.sprite.Group()
         self.aliens = pygame.sprite.Group()
 
         self._create_fleet()
@@ -38,8 +37,9 @@ class AlienInvasion:
             
             if self.game_active:
                 self.ship.update()
-                self._update_bullets()
+                self.bullets.update()
                 self._update_aliens()
+                self._check_bullet_alien_collisions()
             
             self._update_screen()
             self.clock.tick(60)
@@ -96,8 +96,7 @@ class AlienInvasion:
     def _update_screen(self):
         """Update images on the screen, and flip to the new screen."""
         self.screen.fill(self.settings.bg_color)
-        for bullet in self.bullets.sprites():
-            bullet.draw_bullet()
+        self.bullets.draw()
         self.ship.blitme()
         self.aliens.draw(self.screen)
         pygame.display.flip()
@@ -110,7 +109,7 @@ class AlienInvasion:
         elif event.key == pygame.K_LEFT:
             self.ship.moving_left = True
         elif event.key == pygame.K_SPACE:
-            self._fire_bullet()
+            self.bullets.fire()
 
     def _check_keyup_events(self, event):
         if event.key == pygame.K_RIGHT:
@@ -118,26 +117,8 @@ class AlienInvasion:
         elif event.key == pygame.K_LEFT:
             self.ship.moving_left = False
 
-    def _fire_bullet(self):
-        """Create a new bullet and add it to the bullets group."""
-        if len(self.bullets) < self.settings.bullets_allowed:
-            new_bullet = Bullet(self)
-            self.bullets.add(new_bullet)
-
-    def _update_bullets(self):
-        """Update position of bullets and get rid of old bullets."""
-        # Update bullet positions.
-        self.bullets.update()
-
-        # Get rid of bullets that have disappeared.
-        for bullet in self.bullets.copy():
-            if bullet.rect.bottom <= 0:
-                self.bullets.remove(bullet)
-
-        self._check_bullet_alien_collisions()
-
     def _check_bullet_alien_collisions(self):        
-        collisions = pygame.sprite.groupcollide(self.bullets, self.aliens, True, True)
+        collisions = pygame.sprite.groupcollide(self.bullets.bullets, self.aliens, True, True)
         if not self.aliens:
             self.bullets.empty()
             self._create_fleet()
