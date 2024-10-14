@@ -19,8 +19,6 @@ class AlienInvasion:
         self.clock = pygame.time.Clock()
         self.settings = Settings()
         self.screen = pygame.display.set_mode((self.settings.screen_width, self.settings.screen_height))
-        # self.settings.screen_width = self.screen.get_rect().width
-        # self.settings.screen_height = self.screen.get_rect().height
         pygame.display.set_caption("Alien Invasion")
 
         self.stats = GameStats(self)
@@ -85,13 +83,13 @@ class AlienInvasion:
             self._ship_hit()
 
     def _check_bullet_alien_collisions(self):        
-        collisions = pygame.sprite.groupcollide(self.bullets.bullets, self.aliens.aliens, True, True)
-        if not self.aliens.aliens:
+        collisions = pygame.sprite.groupcollide(self.bullets.group, self.aliens.group, True, True)
+        if not self.aliens.group:
             self.bullets.empty()
             self.aliens.create_fleet()
 
     def _check_alien_ship_collisions(self):
-        if pygame.sprite.spritecollideany(self.ship, self.aliens.aliens):
+        if pygame.sprite.spritecollideany(self.ship, self.aliens.group):
             self._ship_hit()
 
     def _ship_hit(self):
