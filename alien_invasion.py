@@ -77,6 +77,8 @@ class AlienInvasion:
             self.ship.moving_left = True
         elif event.key == pygame.K_SPACE:
             self.bullets.fire()
+        elif event.key == pygame.K_p:
+            self._play()
 
     def _check_keyup_events(self, event):
         if event.key == pygame.K_RIGHT:
@@ -112,10 +114,13 @@ class AlienInvasion:
     def _check_play_button(self, mouse_pos):
         button_clicked = self.play_button.rect.collidepoint(mouse_pos)
         if button_clicked and not self.game_active:
-            self.stats.reset_stats()
-            self.game_active = True
-            self._reset()
-            pygame.mouse.set_visible(False)
+            self._play()
+
+    def _play(self):
+        self.stats.reset_stats()
+        self.game_active = True
+        self._reset()
+        pygame.mouse.set_visible(False)
 
     def _reset(self):
             self.bullets.empty()
