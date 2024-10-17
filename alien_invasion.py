@@ -8,6 +8,7 @@ from game_stats import GameStats
 from ship import Ship
 from bullets import Bullets
 from aliens import Aliens
+from button import Button
 
 class AlienInvasion:
     """Overall class to manage game assets and behaviour."""
@@ -20,6 +21,7 @@ class AlienInvasion:
         self.settings = Settings()
         self.screen = pygame.display.set_mode((self.settings.screen_width, self.settings.screen_height))
         pygame.display.set_caption("Alien Invasion")
+        self.play_button = Button(self, "Play")
 
         self.stats = GameStats(self)
         self.bullets = Bullets(self)
@@ -51,6 +53,9 @@ class AlienInvasion:
                 self._check_keydown_events(event)
             elif event.type == pygame.KEYUP:
                 self._check_keyup_events(event)
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_pos = pygame.mouse.get_pos()
+                self._check_play_button(mouse_pos)
 
     def _update_screen(self):
         """Update images on the screen, and flip to the new screen."""
@@ -58,6 +63,9 @@ class AlienInvasion:
         self.bullets.draw()
         self.ship.blitme()
         self.aliens.draw()
+        if not self.game_active:
+            self.play_button.draw_button()
+
         pygame.display.flip()
 
     def _check_keydown_events(self, event):
@@ -103,6 +111,10 @@ class AlienInvasion:
             sleep(0.5)
         else:
             self.game_active = False
+    
+    def _check_play_button(self, mouse_pos):
+        if self.play_button.rect.collidepoint(mouse_pos):
+            self.game_active = True
 
 if __name__ == '__main__':
     #Make a game instance, and run the game.
