@@ -119,6 +119,7 @@ class AlienInvasion:
             self.stats.ships_left -= 1
             self._reset()
             sleep(0.5)
+            self.sb.prep_ships()
         else:
             self.game_active = False
             pygame.mouse.set_visible(True)
@@ -127,15 +128,16 @@ class AlienInvasion:
         button_clicked = self.play_button.rect.collidepoint(mouse_pos)
         if button_clicked and not self.game_active:
             self._play()
-            self.settings.initialize_dynamic_settings()
 
     def _play(self):
+        self.settings.initialize_dynamic_settings()
         self.stats.reset_stats()
-        self.game_active = True
         self._reset()
         self.sb.prep_score()
         self.sb.prep_level()
+        self.sb.prep_ships()
         pygame.mouse.set_visible(False)
+        self.game_active = True
 
     def _reset(self):
             self.bullets.empty()
