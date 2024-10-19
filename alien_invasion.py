@@ -107,6 +107,8 @@ class AlienInvasion:
             self.bullets.empty()
             self.aliens.create_fleet()
             self.settings.increase_speed()
+            self.stats.level += 1
+            self.sb.prep_level()
 
     def _check_alien_ship_collisions(self):
         if pygame.sprite.spritecollideany(self.ship, self.aliens.group):
@@ -132,6 +134,7 @@ class AlienInvasion:
         self.game_active = True
         self._reset()
         self.sb.prep_score()
+        self.sb.prep_level()
         pygame.mouse.set_visible(False)
 
     def _reset(self):
