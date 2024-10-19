@@ -9,6 +9,7 @@ from ship import Ship
 from bullets import Bullets
 from aliens import Aliens
 from button import Button
+from scoreboard import Scoreboard
 
 class AlienInvasion:
     """Overall class to manage game assets and behaviour."""
@@ -27,6 +28,7 @@ class AlienInvasion:
         self.bullets = Bullets(self)
         self.ship = Ship(self)
         self.aliens = Aliens(self)
+        self.sb = Scoreboard(self)
 
         self.aliens.create_fleet()
 
@@ -63,6 +65,7 @@ class AlienInvasion:
         self.bullets.draw()
         self.ship.blitme()
         self.aliens.draw()
+        self.sb.show_score()
         if not self.game_active:
             self.play_button.draw_button()
 
